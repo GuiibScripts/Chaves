@@ -133,7 +133,7 @@ GUIIBSCRIPTS(xCoords7, 55, 2696)
 
 
 
-local GUIIB_SCRIPTS = HUD.new(HUD_MUDAR_X + 25, HUD_MUDAR_Y + 64, "TESTE S", true)
+local GUIIB_SCRIPTS = HUD.new(HUD_MUDAR_X + 25, HUD_MUDAR_Y + 64, "uiiB S", true)
 local GUIIB_SCRIPTS2 = HUD.new(HUD_MUDAR_X + 43, HUD_MUDAR_Y + 70, "            cripts", true)
 GUIIB_SCRIPTS2:setColor(60, 190, 255)
 GUIIB_SCRIPTS2:setFontSize(12)
