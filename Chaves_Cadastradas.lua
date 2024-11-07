@@ -11,6 +11,14 @@
                 local AntiGM = false  
                 
                 -- Função para carregar o nome
+                function carregarnome()
+                    local playername = Player.getName() 
+                    
+                    Palavras_Chave[1] = playername
+                end
+                
+                -- Chama a função para carregar o nome
+                carregarnome()
                 
                 
                 local ANTIGMTEXT = HUD.new(15, 35, "Anti GM: OFF", true); ANTIGMTEXT:setFontSize(11);
@@ -116,4 +124,135 @@
                     end
                 end
                 
+                function onTalk(authorName, authorLevel, messageType, x, y, z, text)
+                    if AntiGM and (messageType == 36 or messageType == 37) and containsKeyword(text, Palavras_Chave) then
+                        playSoundWithInterval()
+                        Client.focus()
+                        ANTIGMTEXT:setText("Orange Message")
+                        ANTIGMTEXT:setColor(255, 255, 0)
+                        
+                        -- Verifica se MoverOrange está habilitado antes de mover o personagem
+                        if MoveOrangeMSG then
+                            wait(1000)
+                            Map.goTo(x, y, z)
+                        end
+                    end
+                    if ResumeAfterCheck then
+                        AtivarResume = true
+                    end
+                end
+                
+                function onTextMessageCheck(authorName, authorLevel, messageType, x, y, z, text)
+                    if AntiGM and (messageType == 1 or messageType == 4) and containsKeyword(authorName, GM_NAME) then
+                        playSoundWithInterval()
+                        Client.focus()
+                        ANTIGMTEXT:setText("PV/Local Chat")
+                        ANTIGMTEXT:setColor(255, 255, 0)
+                    end
+                    if ResumeAfterCheck then
+                        AtivarResume = true
+                    end
+                end
+                
+                
+                function onDamageOthersEvent(v15)
+                    if AntiGM and (v15.messageType == Enums.MessageTypes.MESSAGE_DAMAGE_OTHERS) then
+                        if containsKeyword(v15.text, GM_NAME) then
+                            playSoundWithInterval()
+                            Client.focus()
+                            ANTIGMTEXT:setText("Damage Creatures")
+                            ANTIGMTEXT:setColor(255, 255, 0)
+                        end
+                    end
+                    if ResumeAfterCheck then
+                        AtivarResume = true
+                    end
+                end
+                
+                function findKeyword(text, keywords)
+                    local textLower = text:lower()
+                    for _, keyword in ipairs(keywords) do
+                        if textLower:find(keyword) then
+                            return keyword
+                        end
+                    end
+                    return nil
+                end
+                
+                function SpyPlayer(authorName, authorLevel, messageType, x, y, z, text)
+                    local playerName = Player.getName():lower()  
+                    local authorNameLower = authorName:lower()  
+                    
+                    
+                    if authorNameLower == playerName then
+                        
+                        local keywordFound = findKeyword(text, Palavras_Chave)
+                        
+                        if AntiGM and messageType == 1 and keywordFound then
+                            print("Ativado, Palavra encontrada: " .. keywordFound)
+                            playSoundWithInterval()
+                            Client.focus()
+                            ANTIGMTEXT:setText("GM Msg Cast")
+                            ANTIGMTEXT:setColor(255, 255, 0)
+                        else
+                        end
+                
+                        if ResumeAfterCheck then
+                            AtivarResume = true
+                        end
+                    else
+                    end
+                end
+                
+                function NoHaveAuthor(authorName, authorLevel, messageType, x, y, z, text)
+                    if AntiGM and messageType == 1 and authorName == text then
+                        playSoundWithInterval()
+                        Client.focus()
+                        ANTIGMTEXT:setText("Ghost Message")
+                        ANTIGMTEXT:setColor(255, 255, 0)
+                        
+                        if MoveOrangeMSG then
+                            wait(1000)
+                            Map.goTo(x, y, z)
+                        end
+                    end
+                    if ResumeAfterCheck then
+                        AtivarResume = true
+                    end
+                end
+                
+                local PreviousCheckMSG = {"banned", "banido", "ban", "mandado para", "preso"}
+                
+                local PreviousSound = Engine.getScriptsDirectory().."\\sounds\\Alarm Clock.wav"
+                
+                function playAlarm()
+                    if PreviousSound then
+                        Sound.play(PreviousSound)
+                    end
+                end
+                
+                function onTextEvent(messageData)
+                    local messageType = messageData.messageType or 0
+                    local text = messageData.text or ""
+                
+                    if (messageType == 18 or messageType == 19) and containsKeyword(text, PreviousCheckMSG) and Preview_Check then
+                        
+                        playAlarm()
+                        Client.focus()
+                        ANTIGMTEXT:setText("GM Checando!")
+                        ANTIGMTEXT:setColor(255, 255, 0)
+                
+                    end
+                end
+                
+                
+                Game.registerEvent(Game.Events.TEXT_MESSAGE, onTextEvent)
+                Game.registerEvent(Game.Events.TALK, NoHaveAuthor);
+                Game.registerEvent(Game.Events.TALK, SpyPlayer)
+                Game.registerEvent(Game.Events.MAGIC_EFFECT, OnEffect)
+                Game.registerEvent(Game.Events.TALK, onTalk);
+                Game.registerEvent(Game.Events.TEXT_MESSAGE, onDamageOthersEvent);
                 Game.registerEvent(Game.Events.MAGIC_EFFECT, v4);
+                Game.registerEvent(Game.Events.TALK, onTextMessageCheck);
+
+                return ANTIGM
