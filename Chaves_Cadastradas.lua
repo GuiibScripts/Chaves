@@ -11,14 +11,6 @@
                 local AntiGM = false  
                 
                 -- Função para carregar o nome
-                function carregarnome()
-                    local playername = Player.getName() 
-                    
-                    Palavras_Chave[1] = playername
-                end
-                
-                -- Chama a função para carregar o nome
-                carregarnome()
                 
                 
                 local ANTIGMTEXT = HUD.new(15, 35, "Anti GM: OFF", true); ANTIGMTEXT:setFontSize(11);
