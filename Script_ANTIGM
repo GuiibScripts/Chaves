@@ -1,13 +1,15 @@
-local DLSJKADSJKLA = { 56, 57, 263, 234, 265, 266, 267, 307, 308, 85, 86, 406, 407 }
-local Palavras_Chave = {playername, "escrev", "digit", "mova", "verifi", "gire", "rapid", "esta", "valor", "jogad", "apert", "olh", "baix", "direit", "esquerd", "cima", "apont", "quanto", "quando", "qual", "bot", "criatu", "aproxi", "fale", "outfit", "diagonal", "checa", "fala", "check", "camarada", "player", "cidade" }
-local GM_NAME = {"Guido on", "Rubini on", "Wylla on", "Caffeezin on", "Cheese on", "Escanor on", "Porteiro on", "Van on", "Vtn on" }
+-- Inicialização com valores vazios, prontos para serem substituídos pelo script local.
+local DLSJKADSJKLA = DLSJKADSJKLA or {}
+local Palavras_Chave = Palavras_Chave or {playername, ""}
+local GM_NAME = GM_NAME or {""}
 
-local Preview_Check = false      -- true = Ativa Som sempre que tem algum BAN [Nao Pausa Cavebot]
-local MoveEffectID = true       -- true = Mover para Effect ID (SETA)
-local MoveOrangeMSG = false     -- true = Mover para Orange MSG
-local ResumeAfterCheck = false  -- true = Ativar Cavebot Apos Check GM
-local TimeAfterCheck = 30       -- Tempo em Segundos para Ativar CAVEBOT apos CHECK
+local Preview_Check = Preview_Check or false      -- true = Ativa Som sempre que tem algum BAN
+local MoveEffectID = MoveEffectID or true       -- Mover para Effect ID
+local MoveOrangeMSG = MoveOrangeMSG or false     -- Mover para Orange MSG
+local ResumeAfterCheck = ResumeAfterCheck or false  -- Ativar Cavebot após check GM
+local TimeAfterCheck = TimeAfterCheck or 30       -- Tempo em segundos para ativar Cavebot após check
 
+-- O restante do código continua normalmente
 
 -------------------------------------------------
 -------------- INCLUDE DLLS --------------------
