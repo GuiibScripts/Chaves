@@ -1,18 +1,27 @@
 -- Script da Nuvem
--- Recebe os parâmetros da tabela `Config` definida no script local
+-- Verifica e inicializa `Config` caso esteja vazio
+local Config = Config or {}
 
-local Config = Config or {}  -- Inicializa `Config` caso esteja vazio
+-- Função alternativa para concatenar tabelas caso `table.concat` não esteja disponível
+local function concatTable(tbl, sep)
+    local str = ""
+    sep = sep or ", "
+    for i, v in ipairs(tbl) do
+        str = str .. v .. (i < #tbl and sep or "")
+    end
+    return str
+end
 
--- Exemplo de como acessar os parâmetros
+-- Usa `concatTable` em vez de `table.concat` para evitar erros
 print("Parâmetros carregados com sucesso:")
-print("DLSJKADSJKLA:", table.concat(Config.DLSJKADSJKLA, ", "))
-print("Primeira palavra-chave:", Config.Palavras_Chave[1] or "N/A")
-print("Primeiro GM:", Config.GM_NAME[1] or "N/A")
-print("Preview_Check:", Config.Preview_Check)
-print("MoveEffectID:", Config.MoveEffectID)
-print("MoveOrangeMSG:", Config.MoveOrangeMSG)
-print("ResumeAfterCheck:", Config.ResumeAfterCheck)
-print("TimeAfterCheck:", Config.TimeAfterCheck)
+print("DLSJKADSJKLA:", concatTable(Config.DLSJKADSJKLA or {}, ", "))
+print("Primeira palavra-chave:", Config.Palavras_Chave and Config.Palavras_Chave[1] or "N/A")
+print("Primeiro GM:", Config.GM_NAME and Config.GM_NAME[1] or "N/A")
+print("Preview_Check:", Config.Preview_Check or "N/A")
+print("MoveEffectID:", Config.MoveEffectID or "N/A")
+print("MoveOrangeMSG:", Config.MoveOrangeMSG or "N/A")
+print("ResumeAfterCheck:", Config.ResumeAfterCheck or "N/A")
+print("TimeAfterCheck:", Config.TimeAfterCheck or "N/A")
 
 -- Continue com o restante do código, usando `Config` conforme necessário...
 
