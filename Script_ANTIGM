@@ -1,21 +1,18 @@
--- Inicialização com valores vazios, prontos para serem substituídos pelo script local.
-local DLSJKADSJKLA = DLSJKADSJKLA or {}
-local Palavras_Chave = Palavras_Chave or {playername, ""}
-local GM_NAME = GM_NAME or {""}
+-- Inicialização das variáveis com valores padrão caso venham vazias
+DLSJKADSJKLA = DLSJKADSJKLA or {}
+Palavras_Chave = Palavras_Chave or {playername, ""}
+GM_NAME = GM_NAME or {""}
+Preview_Check = Preview_Check or false
+MoveEffectID = MoveEffectID or true
+MoveOrangeMSG = MoveOrangeMSG or false
+ResumeAfterCheck = ResumeAfterCheck or false
+TimeAfterCheck = TimeAfterCheck or 30
 
-local Preview_Check = Preview_Check or false      -- true = Ativa Som sempre que tem algum BAN
-local MoveEffectID = MoveEffectID or true       -- Mover para Effect ID
-local MoveOrangeMSG = MoveOrangeMSG or false     -- Mover para Orange MSG
-local ResumeAfterCheck = ResumeAfterCheck or false  -- Ativar Cavebot após check GM
-local TimeAfterCheck = TimeAfterCheck or 30       -- Tempo em segundos para ativar Cavebot após check
-
+-- Exemplo de como as variáveis podem ser usadas
 print("Parâmetros carregados com sucesso:")
 print("DLSJKADSJKLA: ", table.concat(DLSJKADSJKLA, ", "))
 print("Primeira palavra-chave: ", Palavras_Chave[1])
 print("Primeiro GM: ", GM_NAME[1])
-
--- Continuação do script na nuvem...
--- Aqui o código usará as variáveis já definidas pelo script local
 
 -------------------------------------------------
 -------------- INCLUDE DLLS --------------------
