@@ -1,15 +1,13 @@
--- Simulação de leitura de um valor enviado via POST
-local args = {}
-ngx.req.read_body()
-local data = ngx.req.get_post_args()
-local teste = data.teste or "false"  -- Pega o valor de 'teste' enviado ou usa "false" como padrão
+local teste = true
 
--- Converte o valor de 'teste' para um booleano
-teste = (teste == "true")
+function guiibscripts()
+    local Guiib = HUD.new(200, 200, "TESTE")
 
--- Agora, utilize o valor de 'teste' no seu script
-if teste then
-    print("O valor de teste é TRUE!")
-else
-    print("O valor de teste é FALSE!")
+    if teste then
+        Guiib:setColor(255, 0, 0)
+    else
+        Guiib:setColor(0, 255, 0)
+    end
 end
+
+guiibscripts()
