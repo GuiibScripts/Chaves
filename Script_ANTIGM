@@ -1,4 +1,4 @@
-local teste = true
+local teste  -- Inicialmente nil; será definida no script local
 
 function guiibscripts()
     local Guiib = HUD.new(200, 200, "TESTE")
