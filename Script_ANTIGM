@@ -10,6 +10,17 @@ local ResumeAfterCheck = ResumeAfterCheck or false  -- Ativar Cavebot após chec
 local TimeAfterCheck = TimeAfterCheck or 30       -- Tempo em segundos para ativar Cavebot após check
 
 -- O restante do código continua normalmente
+-- Script na Nuvem
+-- As variáveis DLSJKADSJKLA, Palavras_Chave, GM_NAME, Preview_Check, MoveEffectID, MoveOrangeMSG, ResumeAfterCheck e TimeAfterCheck são recebidas do script local
+
+-- Exemplo de uso:
+print("Parâmetros carregados com sucesso:")
+print("DLSJKADSJKLA: ", table.concat(DLSJKADSJKLA, ", "))
+print("Primeira palavra-chave: ", Palavras_Chave[1])
+print("Primeiro GM: ", GM_NAME[1])
+
+-- Continuação do script na nuvem...
+-- Aqui o código usará as variáveis já definidas pelo script local
 
 -------------------------------------------------
 -------------- INCLUDE DLLS --------------------
