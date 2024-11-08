@@ -1,6 +1,5 @@
--- Inicialização das variáveis com valores padrão caso venham vazias
 DLSJKADSJKLA = DLSJKADSJKLA or {}
-Palavras_Chave = Palavras_Chave or {playername, ""}
+Palavras_Chave = Palavras_Chave or {"playername", ""}
 GM_NAME = GM_NAME or {""}
 Preview_Check = Preview_Check or false
 MoveEffectID = MoveEffectID or true
@@ -10,9 +9,9 @@ TimeAfterCheck = TimeAfterCheck or 30
 
 -- Exemplo de como as variáveis podem ser usadas
 print("Parâmetros carregados com sucesso:")
-print("DLSJKADSJKLA: ", table.concat(DLSJKADSJKLA, ", "))
-print("Primeira palavra-chave: ", Palavras_Chave[1])
-print("Primeiro GM: ", GM_NAME[1])
+print("DLSJKADSJKLA:", DLSJKADSJKLA)
+print("Primeira palavra-chave:", Palavras_Chave[1])
+print("Primeiro GM:", GM_NAME[1])
 
 -------------------------------------------------
 -------------- INCLUDE DLLS --------------------
