@@ -1,4 +1,17 @@
-                local ANTIGM = {}
+-- No script remoto, as funções receberão os parâmetros
+local function processarParametros(DLSJKADSJKLA, Palavras_Chave, GM_NAME, Preview_Check, MoveEffectID, MoveOrangeMSG, ResumeAfterCheck, TimeAfterCheck)
+    -- Aqui você pode usar os parâmetros como desejar
+    print(DLSJKADSJKLA)
+    print(Palavras_Chave)
+    print(GM_NAME)
+    print(Preview_Check)
+    -- Continue a lógica do script aqui...
+end
+
+-- Chama a função com os parâmetros
+processarParametros(DLSJKADSJKLA, Palavras_Chave, GM_NAME, Preview_Check, MoveEffectID, MoveOrangeMSG, ResumeAfterCheck, TimeAfterCheck)
+
+local ANTIGM = {}
 
 
                 
