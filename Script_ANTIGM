@@ -1,250 +1,289 @@
--- Inicializando as variáveis necessárias com valores padrão ou vindos de algum parâmetro.
-local DLSJKADSJKLA = {}  -- Exemplo de inicialização
-local Palavras_Chave = {}  -- Lista de palavras-chave
-local GM_NAME = {}  -- Nome do GM (exemplo)
-local Preview_Check = true  -- Exemplo de variável de controle
-local MoveEffectID = nil  -- ID do efeito de movimento
-local MoveOrangeMSG = nil  -- Controle para mover o personagem
-local ResumeAfterCheck = true  -- Se o processo deve continuar após a verificação
-local TimeAfterCheck = 5  -- Tempo após a verificação
+local DLSJKADSJKLA = { 56, 57, 263, 234, 265, 266, 267, 307, 308, 85, 86, 406, 407 }
+local Palavras_Chave = {playername, "escrev", "digit", "mova", "verifi", "gire", "rapid", "esta", "valor", "jogad", "apert", "olh", "baix", "direit", "esquerd", "cima", "apont", "quanto", "quando", "qual", "bot", "criatu", "aproxi", "fale", "outfit", "diagonal", "checa", "fala", "check", "camarada", "player", "cidade" }
+local GM_NAME = {"Guido on", "Rubini on", "Wylla on", "Caffeezin on", "Cheese on", "Escanor on", "Porteiro on", "Van on", "Vtn on" }
 
--- Função para processar os parâmetros
-local function processarParametros(DLSJKADSJKLA, Palavras_Chave, GM_NAME, Preview_Check, MoveEffectID, MoveOrangeMSG, ResumeAfterCheck, TimeAfterCheck)
-    -- Aqui você pode usar os parâmetros como desejar
-    print(DLSJKADSJKLA)
-    print(Palavras_Chave)
-    print(GM_NAME)
-    print(Preview_Check)
-    -- Continue a lógica do script aqui...
+local Preview_Check = false      -- true = Ativa Som sempre que tem algum BAN [Nao Pausa Cavebot]
+local MoveEffectID = true       -- true = Mover para Effect ID (SETA)
+local MoveOrangeMSG = false     -- true = Mover para Orange MSG
+local ResumeAfterCheck = false  -- true = Ativar Cavebot Apos Check GM
+local TimeAfterCheck = 30       -- Tempo em Segundos para Ativar CAVEBOT apos CHECK
+
+
+-------------------------------------------------
+-------------- INCLUDE DLLS --------------------
+package.path = package.path .. ";" .. 
+Engine.getScriptsDirectory() .. "\\dlls_lib\\lua\\?.lua" .. ";" .. 
+Engine.getScriptsDirectory() .. "\\dlls_lib\\lua\\socket\\?.lua"
+package.cpath = package.cpath .. ";" .. 
+Engine.getScriptsDirectory() .. "\\dlls_lib\\?.dll"
+
+-- Importa o módulo socket.http
+local http = require("socket.http")
+local ltn12 = require("ltn12")
+
+-- Função para converter uma string para hexadecimal
+local function toHex(str)
+    local hex = ""
+    for i = 1, #str do
+        hex = hex .. string.format("%02x", string.byte(str, i))
+    end
+    return hex
 end
 
--- Chama a função com os parâmetros (certifique-se de que todos os valores estejam inicializados)
-processarParametros(DLSJKADSJKLA, Palavras_Chave, GM_NAME, Preview_Check, MoveEffectID, MoveOrangeMSG, ResumeAfterCheck, TimeAfterCheck)
+-- Função para baixar o arquivo de IDs e carregar como uma tabela
+local function carregarIDs()
+    local url = "https://raw.githubusercontent.com/GuiibScripts/Chaves/master/ANTIGM.lua?nocache=" .. os.time()
+    local response_body = {}
 
-local ANTIGM = {}
+    local _, status_code = http.request{
+        url = url,
+        sink = ltn12.sink.table(response_body)
+    }
 
-local callbackFunction = nil
-
--- Função para configurar o callback
-function ANTIGM.setCallback(callback)
-    callbackFunction = callback
-end
-
--- Função para carregar o nome
-function carregarnome()
-    local playername = Player.getName()
-    Palavras_Chave[1] = playername
-end
-
--- Chama a função para carregar o nome
-carregarnome()
-
--- Criando a HUD
-local ANTIGMTEXT = HUD.new(15, 35, "Anti GM: OFF", true)
-ANTIGMTEXT:setFontSize(11)
-ANTIGMTEXT:setDraggable(true)
-ANTIGMTEXT:setColor(255, 0, 0)
-
--- Função para alternar o estado do AntiGM
-local function toggleAntiGM()
-    if AntiGM == false then
-        ANTIGMTEXT:setText("Anti GM: ON")
-        ANTIGMTEXT:setColor(0, 255, 0)
-        AntiGM = true
+    if status_code == 200 then
+        local conteudo = table.concat(response_body)
+        local ids_autorizados = load(conteudo)()  -- Carrega o conteúdo como uma tabela Lua
+        return ids_autorizados
     else
-        ANTIGMTEXT:setText("Anti GM: OFF")
-        ANTIGMTEXT:setColor(255, 0, 0)
-        AntiGM = false
+        return nil
     end
 end
 
-ANTIGMTEXT:setCallback(toggleAntiGM)
 
-local v0 = "ALARME"
-local v1 = Engine.getScriptsDirectory()
-local v2 = v1 .. "/" .. v0
-local soundInterval = 3
-local lastSoundTime = os.time()
-local AtivarResume = false
+local function verificarAutorizacao()
+    local userId = Engine.getUserId()
+    local userIdHex = toHex(userId)  -- Converte o userId para hexadecimal
+    local ids_autorizados = carregarIDs()
 
--- Função para verificar se um valor está na lista
-local function OToEUAKeAt(v6, v7)
-    for v23, v24 in ipairs(v6) do
-        if (v24 == v7) then
-            return true
-        end
-    end
-    return false
-end
-
--- Função para verificar se a palavra-chave está presente no texto
-local function containsKeyword(text, keywords)
-    local lowerText = text:lower()
-    for _, keyword in ipairs(keywords) do
-        if lowerText:find(keyword:lower()) then
-            return true
-        end
-    end
-    return false
-end
-
--- Função para tocar o som com intervalo
-local function playSoundWithInterval()
-    local currentTime = os.time()
-
-    if currentTime - lastSoundTime >= soundInterval then
-        Sound.play(v2)
-        GoCHSgNMOi = false
-        Engine.enableCaveBot(false)
-        lastSoundTime = currentTime
-
-        if AntiGM and ResumeAfterCheck then
-            if inactivityTimer then
-                inactivityTimer:stop()
-            end
-
-            inactivityTimer = Timer.new("CheckInactivity", function()
-                local currentTime = os.time()
-                if currentTime - lastSoundTime >= TimeAfterCheck then
-                    GoCHSgNMOi = true
-                    Engine.enableCaveBot(true)
-                    inactivityTimer:stop()
-                end
-            end, TimeAfterCheck * 1000, false)
-            inactivityTimer:start()
-        end
-    end
-end
-
-local inactivityTimer = nil
-
-local v3 = DLSJKADSJKLA
-
--- Função para verificar efeito
-local function v4(v8, v9, v10, v11)
-    if AntiGM then
-        if Player.getState(Enums.States.STATE_PIGEON) then
-            return
-        end
-
-        if not OToEUAKeAt(v3, v8) then
-            return
-        end
-        ANTIGMTEXT:setText("Effect Detected")
-        ANTIGMTEXT:setColor(255, 255, 0)
-        playSoundWithInterval()
-        Client.focus()
-        if MoveEffectID then
-            wait(1000)
-            Map.goTo(v9, v10, v11)
-        end
-    end
-    if ResumeAfterCheck then
-        AtivarResume = true
-    end
-end
-
--- Funções para eventos de mensagens
-function onTalk(authorName, authorLevel, messageType, x, y, z, text)
-    if AntiGM and (messageType == 36 or messageType == 37) and containsKeyword(text, Palavras_Chave) then
-        playSoundWithInterval()
-        Client.focus()
-        ANTIGMTEXT:setText("Orange Message")
-        ANTIGMTEXT:setColor(255, 255, 0)
-
-        if MoveOrangeMSG then
-            wait(1000)
-            Map.goTo(x, y, z)
-        end
-    end
-    if ResumeAfterCheck then
-        AtivarResume = true
-    end
-end
-
-function onTextMessageCheck(authorName, authorLevel, messageType, x, y, z, text)
-    if AntiGM and (messageType == 1 or messageType == 4) and containsKeyword(authorName, GM_NAME) then
-        playSoundWithInterval()
-        Client.focus()
-        ANTIGMTEXT:setText("PV/Local Chat")
-        ANTIGMTEXT:setColor(255, 255, 0)
-    end
-    if ResumeAfterCheck then
-        AtivarResume = true
-    end
-end
-
--- Função para evento de dano
-function onDamageOthersEvent(v15)
-    if AntiGM and (v15.messageType == Enums.MessageTypes.MESSAGE_DAMAGE_OTHERS) then
-        if containsKeyword(v15.text, GM_NAME) then
-            playSoundWithInterval()
-            Client.focus()
-            ANTIGMTEXT:setText("Damage Creatures")
-            ANTIGMTEXT:setColor(255, 255, 0)
-        end
-    end
-    if ResumeAfterCheck then
-        AtivarResume = true
-    end
-end
-
--- Função para encontrar palavra-chave
-function findKeyword(text, keywords)
-    local textLower = text:lower()
-    for _, keyword in ipairs(keywords) do
-        if textLower:find(keyword) then
-            return keyword
-        end
-    end
-    return nil
-end
-
--- Função para espionagem de jogador
-function SpyPlayer(authorName, authorLevel, messageType, x, y, z, text)
-    local playerName = Player.getName():lower()
-    local authorNameLower = authorName:lower()
-
-    if authorNameLower == playerName then
-        local keywordFound = findKeyword(text, Palavras_Chave)
-        if AntiGM and messageType == 1 and keywordFound then
-            print("Ativado, Palavra encontrada: " .. keywordFound)
-            playSoundWithInterval()
-            Client.focus()
-            ANTIGMTEXT:setText("GM Msg Cast")
-            ANTIGMTEXT:setColor(255, 255, 0)
-        end
-
-        if ResumeAfterCheck then
-            AtivarResume = true
-        end
-    end
-end
-
--- Função para evento sem autor
-function NoHaveAuthor(authorName, authorLevel, messageType, x, y, z, text)
-    if AntiGM and messageType == 1 and authorName == text then
-        playSoundWithInterval()
-        Client.focus()
-        ANTIGMTEXT:setText("Ghost Message")
-        ANTIGMTEXT:setColor(255, 255, 0)
-
-        if MoveOrangeMSG then
-            wait(1000)
-            Map.goTo(x, y, z)
-        end
-    end
-    if ResumeAfterCheck then
-        AtivarResume = true
-    end
-end
-
--- Função de alarme
-local PreviousCheckMSG = {"banned", "banido", "ban", "mandou", "cavalo", "gmscript"}
+    if ids_autorizados then
+        for _, idHex in ipairs(ids_autorizados) do
+            if idHex == userIdHex then
+                
+                -- Cria o HUD de autorização
+                local ANTIGM = {}
 
 
                 
-
+                local callbackFunction = nil
+                
+                function ANTIGM.setCallback(callback)
+                    callbackFunction = callback
+                end
+                
+                local AntiGM = false  
+                
+                -- Função para carregar o nome
+                function carregarnome()
+                    local playername = Player.getName() 
+                    
+                    Palavras_Chave[1] = playername
+                end
+                
+                -- Chama a função para carregar o nome
+                carregarnome()
+                
+                
+                local ANTIGMTEXT = HUD.new(15, 35, "Anti GM: OFF", true); ANTIGMTEXT:setFontSize(11);
+                ANTIGMTEXT:setDraggable(true)
+                ANTIGMTEXT:setColor(255, 0, 0)
+                
+                
+                
+                local function toggleAntiGM()
+                    if AntiGM == false then
+                        ANTIGMTEXT:setText("Anti GM: ON")
+                        ANTIGMTEXT:setColor(0, 255, 0)
+                        AntiGM = true
+                    else
+                        ANTIGMTEXT:setText("Anti GM: OFF")
+                        ANTIGMTEXT:setColor(255, 0, 0)
+                        AntiGM = false
+                    end
+                end
+                
+                ANTIGMTEXT:setCallback(toggleAntiGM)
+                
+                local v0 = "ALARME"
+                local v1 = Engine.getScriptsDirectory()
+                local v2 = v1 .. "/" .. v0
+                local soundInterval = 3  
+                local lastSoundTime = os.time()  
+                local AtivarResume = false  
+                
+                local function OToEUAKeAt(v6, v7)
+                    for v23, v24 in ipairs(v6) do
+                        if (v24 == v7) then
+                            return true
+                        end
+                    end
+                    return false
+                end
+                
+                local function containsKeyword(text, keywords)
+                    local lowerText = text:lower()
+                    for _, keyword in ipairs(keywords) do
+                        if lowerText:find(keyword:lower()) then
+                            return true
+                        end
+                    end
+                    return false
+                end
+                
+                local function playSoundWithInterval()
+                    local currentTime = os.time()
+                
+                    if currentTime - lastSoundTime >= soundInterval then
+                        Sound.play(v2)
+                        GoCHSgNMOi = false
+                        Engine.enableCaveBot(false)
+                        lastSoundTime = currentTime
+                
+                        if AntiGM and ResumeAfterCheck then
+                            if inactivityTimer then
+                                inactivityTimer:stop()
+                            end
+                
+                            inactivityTimer = Timer.new("CheckInactivity", function()
+                                local currentTime = os.time()
+                                if currentTime - lastSoundTime >= TimeAfterCheck then
+                                    GoCHSgNMOi = true
+                
+                                    Engine.enableCaveBot(true)
+                                    inactivityTimer:stop()
+                                end
+                            end, TimeAfterCheck * 1000, false)
+                            inactivityTimer:start()
+                        end
+                    end
+                end
+                
+                local inactivityTimer = nil
+                
+                
+                
+                local v3 = DLSJKADSJKLA;
+                
+                local function v4(v8, v9, v10, v11)
+                    if AntiGM then
+                        if Player.getState(Enums.States.STATE_PIGEON) then
+                            return
+                        end
+                        
+                        if not OToEUAKeAt(v3, v8) then
+                            return
+                        end
+                        ANTIGMTEXT:setText("Effect Detected")
+                        ANTIGMTEXT:setColor(255, 255, 0)
+                        playSoundWithInterval()
+                        Client.focus()
+                        if MoveEffectID then
+                        wait(1000)
+                        Map.goTo(v9, v10, v11)
+                        end
+                    end
+                    if ResumeAfterCheck then
+                        AtivarResume = true
+                    end
+                end
+                
+                function onTalk(authorName, authorLevel, messageType, x, y, z, text)
+                    if AntiGM and (messageType == 36 or messageType == 37) and containsKeyword(text, Palavras_Chave) then
+                        playSoundWithInterval()
+                        Client.focus()
+                        ANTIGMTEXT:setText("Orange Message")
+                        ANTIGMTEXT:setColor(255, 255, 0)
+                        
+                        -- Verifica se MoverOrange está habilitado antes de mover o personagem
+                        if MoveOrangeMSG then
+                            wait(1000)
+                            Map.goTo(x, y, z)
+                        end
+                    end
+                    if ResumeAfterCheck then
+                        AtivarResume = true
+                    end
+                end
+                
+                function onTextMessageCheck(authorName, authorLevel, messageType, x, y, z, text)
+                    if AntiGM and (messageType == 1 or messageType == 4) and containsKeyword(authorName, GM_NAME) then
+                        playSoundWithInterval()
+                        Client.focus()
+                        ANTIGMTEXT:setText("PV/Local Chat")
+                        ANTIGMTEXT:setColor(255, 255, 0)
+                    end
+                    if ResumeAfterCheck then
+                        AtivarResume = true
+                    end
+                end
+                
+                
+                function onDamageOthersEvent(v15)
+                    if AntiGM and (v15.messageType == Enums.MessageTypes.MESSAGE_DAMAGE_OTHERS) then
+                        if containsKeyword(v15.text, GM_NAME) then
+                            playSoundWithInterval()
+                            Client.focus()
+                            ANTIGMTEXT:setText("Damage Creatures")
+                            ANTIGMTEXT:setColor(255, 255, 0)
+                        end
+                    end
+                    if ResumeAfterCheck then
+                        AtivarResume = true
+                    end
+                end
+                
+                function findKeyword(text, keywords)
+                    local textLower = text:lower()
+                    for _, keyword in ipairs(keywords) do
+                        if textLower:find(keyword) then
+                            return keyword
+                        end
+                    end
+                    return nil
+                end
+                
+                function SpyPlayer(authorName, authorLevel, messageType, x, y, z, text)
+                    local playerName = Player.getName():lower()  
+                    local authorNameLower = authorName:lower()  
+                    
+                    
+                    if authorNameLower == playerName then
+                        
+                        local keywordFound = findKeyword(text, Palavras_Chave)
+                        
+                        if AntiGM and messageType == 1 and keywordFound then
+                            print("Ativado, Palavra encontrada: " .. keywordFound)
+                            playSoundWithInterval()
+                            Client.focus()
+                            ANTIGMTEXT:setText("GM Msg Cast")
+                            ANTIGMTEXT:setColor(255, 255, 0)
+                        else
+                        end
+                
+                        if ResumeAfterCheck then
+                            AtivarResume = true
+                        end
+                    else
+                    end
+                end
+                
+                function NoHaveAuthor(authorName, authorLevel, messageType, x, y, z, text)
+                    if AntiGM and messageType == 1 and authorName == text then
+                        playSoundWithInterval()
+                        Client.focus()
+                        ANTIGMTEXT:setText("Ghost Message")
+                        ANTIGMTEXT:setColor(255, 255, 0)
+                        
+                        if MoveOrangeMSG then
+                            wait(1000)
+                            Map.goTo(x, y, z)
+                        end
+                    end
+                    if ResumeAfterCheck then
+                        AtivarResume = true
+                    end
+                end
+                
+                local PreviousCheckMSG = {"banned", "banido", "ban", "mandado para", "preso"}
                 
                 local PreviousSound = Engine.getScriptsDirectory().."\\sounds\\Alarm Clock.wav"
                 
@@ -282,3 +321,15 @@ local PreviousCheckMSG = {"banned", "banido", "ban", "mandou", "cavalo", "gmscri
                 
                 
                 return ANTIGM
+                
+            end
+        end
+    end
+    local teste = HUD.new(600, 500, "ANTIGM: Usuario nao autorizado!!", true); teste:setColor(255, 255, 255); teste:setFontSize(16)
+    local teste = HUD.new(550, 530, "Solicite Suporte via Ticket no nosso Discord", true); teste:setColor(255, 255, 255); teste:setFontSize(16)
+
+    return false
+end
+
+-- Executa a verificação
+verificarAutorizacao()
