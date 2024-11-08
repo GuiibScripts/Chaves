@@ -9,11 +9,6 @@ local MoveOrangeMSG = MoveOrangeMSG or false     -- Mover para Orange MSG
 local ResumeAfterCheck = ResumeAfterCheck or false  -- Ativar Cavebot após check GM
 local TimeAfterCheck = TimeAfterCheck or 30       -- Tempo em segundos para ativar Cavebot após check
 
--- O restante do código continua normalmente
--- Script na Nuvem
--- As variáveis DLSJKADSJKLA, Palavras_Chave, GM_NAME, Preview_Check, MoveEffectID, MoveOrangeMSG, ResumeAfterCheck e TimeAfterCheck são recebidas do script local
-
--- Exemplo de uso:
 print("Parâmetros carregados com sucesso:")
 print("DLSJKADSJKLA: ", table.concat(DLSJKADSJKLA, ", "))
 print("Primeira palavra-chave: ", Palavras_Chave[1])
