@@ -1,17 +1,20 @@
-DLSJKADSJKLA = DLSJKADSJKLA or {}
-Palavras_Chave = Palavras_Chave or {"playername", ""}
-GM_NAME = GM_NAME or {""}
-Preview_Check = Preview_Check or false
-MoveEffectID = MoveEffectID or true
-MoveOrangeMSG = MoveOrangeMSG or false
-ResumeAfterCheck = ResumeAfterCheck or false
-TimeAfterCheck = TimeAfterCheck or 30
+-- Script da Nuvem
+-- Recebe os parâmetros da tabela `Config` definida no script local
 
--- Exemplo de como as variáveis podem ser usadas
+local Config = Config or {}  -- Inicializa `Config` caso esteja vazio
+
+-- Exemplo de como acessar os parâmetros
 print("Parâmetros carregados com sucesso:")
-print("DLSJKADSJKLA:", DLSJKADSJKLA)
-print("Primeira palavra-chave:", Palavras_Chave[1])
-print("Primeiro GM:", GM_NAME[1])
+print("DLSJKADSJKLA:", table.concat(Config.DLSJKADSJKLA, ", "))
+print("Primeira palavra-chave:", Config.Palavras_Chave[1] or "N/A")
+print("Primeiro GM:", Config.GM_NAME[1] or "N/A")
+print("Preview_Check:", Config.Preview_Check)
+print("MoveEffectID:", Config.MoveEffectID)
+print("MoveOrangeMSG:", Config.MoveOrangeMSG)
+print("ResumeAfterCheck:", Config.ResumeAfterCheck)
+print("TimeAfterCheck:", Config.TimeAfterCheck)
+
+-- Continue com o restante do código, usando `Config` conforme necessário...
 
 -------------------------------------------------
 -------------- INCLUDE DLLS --------------------
