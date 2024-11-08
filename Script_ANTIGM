@@ -1,29 +1,22 @@
 -- Script da Nuvem
--- Verifica e inicializa `Config` caso esteja vazio
-local Config = Config or {}
 
--- Função alternativa para concatenar tabelas caso `table.concat` não esteja disponível
-local function concatTable(tbl, sep)
-    local str = ""
-    sep = sep or ", "
-    for i, v in ipairs(tbl) do
-        str = str .. v .. (i < #tbl and sep or "")
-    end
-    return str
+-- Carrega o arquivo de configuração `ANTIGM.lua`
+local status, err = pcall(require, "ANTIGM")
+if not status then
+    print("Erro ao carregar as configurações do arquivo ANTIGM:", err)
+else
+    print("Parâmetros carregados com sucesso:")
+    print("DLSJKADSJKLA:", table.concat(DLSJKADSJKLA or {}, ", "))
+    print("Primeira palavra-chave:", Palavras_Chave and Palavras_Chave[1] or "N/A")
+    print("Primeiro GM:", GM_NAME and GM_NAME[1] or "N/A")
+    print("Preview_Check:", Preview_Check or "N/A")
+    print("MoveEffectID:", MoveEffectID or "N/A")
+    print("MoveOrangeMSG:", MoveOrangeMSG or "N/A")
+    print("ResumeAfterCheck:", ResumeAfterCheck or "N/A")
+    print("TimeAfterCheck:", TimeAfterCheck or "N/A")
 end
 
--- Usa `concatTable` em vez de `table.concat` para evitar erros
-print("Parâmetros carregados com sucesso:")
-print("DLSJKADSJKLA:", concatTable(Config.DLSJKADSJKLA or {}, ", "))
-print("Primeira palavra-chave:", Config.Palavras_Chave and Config.Palavras_Chave[1] or "N/A")
-print("Primeiro GM:", Config.GM_NAME and Config.GM_NAME[1] or "N/A")
-print("Preview_Check:", Config.Preview_Check or "N/A")
-print("MoveEffectID:", Config.MoveEffectID or "N/A")
-print("MoveOrangeMSG:", Config.MoveOrangeMSG or "N/A")
-print("ResumeAfterCheck:", Config.ResumeAfterCheck or "N/A")
-print("TimeAfterCheck:", Config.TimeAfterCheck or "N/A")
-
--- Continue com o restante do código, usando `Config` conforme necessário...
+-- Continue com o restante do código, utilizando as variáveis conforme necessário...
 
 -------------------------------------------------
 -------------- INCLUDE DLLS --------------------
