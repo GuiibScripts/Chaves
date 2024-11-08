@@ -1,11 +1,12 @@
 function guiibscripts()
     local Guiib = HUD.new(200, 200, "TESTE")
-    Guiib:setColor(255, 255, 255)
 
-    if teste then
+    if teste == 1 then
         Guiib:setColor(255, 0, 0)
-    else
+    elseif teste == 2 then
         Guiib:setColor(0, 255, 0)
+    else
+        Guiib:setColor(255, 255, 255) -- Cor branca para outros valores
     end
 end
 
