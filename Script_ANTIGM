@@ -167,7 +167,7 @@ local function verificarAutorizacao()
                         ANTIGMTEXT:setColor(255, 255, 0)
                         playSoundWithInterval()
                         Client.focus()
-                        if MoveEffectID then
+                        if MoveEffectID == 1then
                         wait(1000)
                         Map.goTo(v9, v10, v11)
                         end
@@ -185,12 +185,12 @@ local function verificarAutorizacao()
                         ANTIGMTEXT:setColor(255, 255, 0)
                         
                         -- Verifica se MoverOrange está habilitado antes de mover o personagem
-                        if MoveOrangeMSG then
+                        if MoveOrangeMSG == 1 then
                             wait(1000)
                             Map.goTo(x, y, z)
                         end
                     end
-                    if ResumeAfterCheck then
+                    if ResumeAfterCheck == 1 then
                         AtivarResume = true
                     end
                 end
@@ -288,7 +288,7 @@ local function verificarAutorizacao()
                     local messageType = messageData.messageType or 0
                     local text = messageData.text or ""
                 
-                    if (messageType == 18 or messageType == 19) and containsKeyword(text, PreviousCheckMSG) and Preview_Check then
+                    if (messageType == 18 or messageType == 19) and containsKeyword(text, PreviousCheckMSG) and Preview_Check == 1 then
                         
                         playAlarm()
                         Client.focus()
