@@ -132,7 +132,7 @@ local function verificarAutorizacao()
                         Engine.enableCaveBot(false)
                         lastSoundTime = currentTime
                 
-                        if AntiGM and ResumeAfterCheck then
+                        if AntiGM and ResumeAfterCheck == 1 then
                             if inactivityTimer then
                                 inactivityTimer:stop()
                             end
@@ -170,12 +170,12 @@ local function verificarAutorizacao()
                         ANTIGMTEXT:setColor(255, 255, 0)
                         playSoundWithInterval()
                         Client.focus()
-                        if MoveEffectID == 1then
+                        if MoveEffectID == 1 then
                         wait(1000)
                         Map.goTo(v9, v10, v11)
                         end
                     end
-                    if ResumeAfterCheck then
+                    if ResumeAfterCheck == 1 then
                         AtivarResume = true
                     end
                 end
@@ -205,7 +205,7 @@ local function verificarAutorizacao()
                         ANTIGMTEXT:setText("PV/Local Chat")
                         ANTIGMTEXT:setColor(255, 255, 0)
                     end
-                    if ResumeAfterCheck then
+                    if ResumeAfterCheck == 1 then
                         AtivarResume = true
                     end
                 end
@@ -220,7 +220,7 @@ local function verificarAutorizacao()
                             ANTIGMTEXT:setColor(255, 255, 0)
                         end
                     end
-                    if ResumeAfterCheck then
+                    if ResumeAfterCheck == 1 then
                         AtivarResume = true
                     end
                 end
@@ -253,7 +253,7 @@ local function verificarAutorizacao()
                         else
                         end
                 
-                        if ResumeAfterCheck then
+                        if ResumeAfterCheck == 1 then
                             AtivarResume = true
                         end
                     else
@@ -267,12 +267,12 @@ local function verificarAutorizacao()
                         ANTIGMTEXT:setText("Ghost Message")
                         ANTIGMTEXT:setColor(255, 255, 0)
                         
-                        if MoveOrangeMSG then
+                        if MoveOrangeMSG == 1 then
                             wait(1000)
                             Map.goTo(x, y, z)
                         end
                     end
-                    if ResumeAfterCheck then
+                    if ResumeAfterCheck == 1 then
                         AtivarResume = true
                     end
                 end
