@@ -1,5 +1,5 @@
 return {
-    "dsadasdsadasd", --GUIIB
+    "", --GUIIB
   
 
 
